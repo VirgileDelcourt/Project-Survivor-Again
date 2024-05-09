@@ -24,7 +24,7 @@ stats = {"maxhp": 100,
 class Player(Display, Entity):
     Instance = None
 
-    def __init__(self, image, hp, armor, speed, cooldown, atk, proj_size, proj_speed, pierce, duration):
+    def __init__(self, image, hp, armor, speed, cooldown, atk, proj_size, proj_speed, pierce, duration, keywords):
         x, y = pygame.display.get_window_size()
         Display.__init__(self, image, (x / 2, y / 2), 50)
         Entity.__init__(self, stats,
@@ -39,6 +39,7 @@ class Player(Display, Entity):
                         duration=duration)
 
         self.timer = cooldown  # temps restant avant la prochaine attaque
+        self.keywords = keywords  # modificateurs appliqués sur les projectiles tirés
         self.invincibility = 0  # temps d'invincibilité restant (en seconde)
         self.momentum = pygame.Vector2(0, 0)  # distance à bouger pour cette frame
 
@@ -57,8 +58,8 @@ class Player(Display, Entity):
     def Fire(self):
         # tire un projectile
         pos = pygame.mouse.get_pos()
-        Projectile(self.coord, pos, self.Get("power"), self.Get("proj_size"),
-                   self.Get("proj_speed"), self.Get("pierce"), self.Get("duration"))
+        Projectile(self.coord, pos, self.Get("power"), self.Get("proj_size"), self.Get("proj_speed"),
+                   self.Get("pierce"), self.Get("duration"), self.keywords[:])
 
     def Update(self, dt):
         # réduit le temps d'invincibilité restant

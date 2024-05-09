@@ -1,3 +1,5 @@
+import Keywords
+
 class Upgrade:
     UpgradesLeft = []
     UpgradesGot = []
@@ -91,6 +93,19 @@ class MovementUp(Upgrade):
 
     def Apply(self, char):
         char.Add("speed", 0.05)
+        super().Apply(char)
+
+
+class Mitosis(Upgrade):
+    def __init__(self):
+        super().__init__("Slow and Steady", "tip.png", 3)
+
+    def Apply(self, char):
+        if self.level + 1 == 3:
+            char.keywords.append(Keywords.Mitosis)
+        else:
+            char.Add("proj_speed", -0.75)
+            char.Add("duration", 2)
         super().Apply(char)
 
 

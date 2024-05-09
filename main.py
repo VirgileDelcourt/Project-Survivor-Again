@@ -15,7 +15,7 @@ pygame.init()
 # initialisation de la fenetre et du joueur
 dimx, dimy = 1080, 720
 window = pygame.display.set_mode((dimx, dimy))
-Player("pip.png", 100, 0, 1, 1, 5, 1, 2, 2, 2)
+Player("pip.png", 100, 0, 1, 1, 5, 1, 2, 2, 2, [])
 
 # creation d'un masque pour l'écran de montee de niveau
 tint = pygame.Surface((dimx, dimy))
@@ -25,7 +25,7 @@ font = pygame.font.Font(None, 40)
 
 # initialisation de chaque upgrade (pour remplir Upgrade.UpgradesLeft)
 for nom in dir(m_Upgrade):
-    if not nom.startswith('__') and nom != "Upgrade":
+    if not nom.startswith('__') and nom != "Upgrade" and nom != "Keywords":
         classe = getattr(m_Upgrade, nom)
         classe()
 
