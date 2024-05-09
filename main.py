@@ -22,6 +22,7 @@ tint = pygame.Surface((dimx, dimy))
 tint.set_alpha(128)
 tint.fill("grey")
 font = pygame.font.Font(None, 40)
+biggerfont = pygame.font.Font(None, 60)
 
 # initialisation de chaque upgrade (pour remplir Upgrade.UpgradesLeft)
 for nom in dir(m_Upgrade):
@@ -35,12 +36,14 @@ upgrades_displays = [Display(None, (0, 0), 0), Display(None, (0, 0), 0), Display
 
 running = True
 last = time()
+timer = 0
 while running:
     # calcul du temps depuis la derniere mise à jour
     dt = time() - last
     last = time()
+    timer += dt
 
-    # on verifie si le joueur veut quitter le jeu
+    # on vérifie si le joueur veut quitter le jeu
     for event in pygame.event.get():
         if event.type == QUIT:
             running = False
@@ -70,7 +73,7 @@ while running:
 
     # spawn des ennemis (plus il y en a, moins on en spawn)
     if len(Enemy.Instances) == 0 \
-            or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * Player.Instance.Get("curse"):
+            or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * Player.Instance.Get("curse") * ((timer / 120) + 1):
         Enemy("pap.png", 10, 10, 1)
 
     # mise à jour de l'écran et de chaque entite
@@ -103,6 +106,20 @@ while running:
     pygame.draw.rect(window, "white", [0, dimy - 30, dimx, 30])
     pygame.draw.rect(window, "blue", [0, dimy - 30, dimx * exp_percent, 30])
 
+    # creation du timer
+    t = ""
+    if timer // 60 < 10:
+        t += "0" + str(int(timer // 60))
+    else:
+        t += str(int(timer // 60))
+    t += ":"
+    if timer % 60 < 10:
+        t += "0" + str(int(timer % 60))
+    else:
+        t += str(int(timer % 60))
+    text = biggerfont.render(t, 1, "black")
+    window.blit(text, (dimx / 2, 5))
+
     # creation de l'ecran de montee de niveau
     if upgrades_to_chose:
         window.blit(tint, (0, 0))
@@ -117,8 +134,8 @@ while running:
             text = font.render("[" + str(i + 1) + "] " + upgrade.name, 1, "black")
             window.blit(text, (dimx * ((i + 1) / 4) - 100, 350))
 
-            text2 = font.render("Level " + str(upgrade.level + 1) + " / " + str(upgrade.maxlevel), 1, "black")
-            window.blit(text2, (dimx * ((i + 1) / 4) - 100, 450))
+            text = font.render("Level " + str(upgrade.level + 1) + " / " + str(upgrade.maxlevel), 1, "black")
+            window.blit(text, (dimx * ((i + 1) / 4) - 100, 450))
 
     # mise à jour de la fenetre
     pygame.display.flip()
