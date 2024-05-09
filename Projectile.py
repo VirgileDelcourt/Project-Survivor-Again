@@ -40,3 +40,6 @@ class Projectile(Display, Entity):
             for keyword in self.keywords:
                 keyword.Update(self, dt)
         super().Update(dt)
+
+    def UpdateSize(self):
+        self.Change_Radius(25 * self.Get("size"))
