@@ -72,11 +72,12 @@ while running:
         dt = 0
 
     # spawn des ennemis (plus il y en a, moins on en spawn)
+    curse = Player.Instance.Get("curse") * ((timer / 120) + 1)
     if len(Enemy.Instances) == 0 \
-            or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * Player.Instance.Get("curse") * ((timer / 120) + 1):
-        Enemy("pap.png", 10, 10, 1)
+            or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * curse:
+        Enemy("pap.png", 10 * curse, 10 * curse, 1 * curse)
 
-    # mise à jour de l'écran et de chaque entite
+    # mise à jour de l'écran et de chaque entité
     window.fill("light green")
     Player.Instance.Update(dt)
     # si le joueur bouge, on bouge toutes les autres entités
