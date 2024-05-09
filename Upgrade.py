@@ -94,6 +94,6 @@ class MovementUp(Upgrade):
         super().Apply(char)
 
 
-# initialisation des variables de classe de Upgrade
+# initialisation des variables de classe d'Upgrade
 Upgrade.UpgradesGot = []
 Upgrade.UpgradesLeft = []

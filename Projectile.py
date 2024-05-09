@@ -1,30 +1,30 @@
 import pygame
+
 from Display import Display
+from Entity import Entity
 
 
-class Projectile(Display):
+class Projectile(Display, Entity):
     Instances = []
 
     def __init__(self, coord, target, atk, size, speed, pierce, duration):
-        super().__init__(None, coord, size * 25)
+        Display.__init__(self, None, coord, size * 25)
         self.movement = pygame.Vector2(target) - self.coord
         self.movement.normalize_ip()
         self.movement *= speed * 200
         self.collided = []
 
-        self.power = atk
-        self.pierce = pierce
-        self.duration = duration
+        Entity.__init__(self, [], power=atk, pierce=pierce, duration=duration, speed=speed, size=size)
 
         Projectile.Instances.append(self)
 
     def Update(self, dt):
         # mouvement
         self.coord += self.movement * dt
-        self.duration -= dt
+        self.Add("duration", -dt)
         # on vérifie si le projectile ne devrait pas disparaitre
-        if self.duration <= 0:
+        if self.Get("duration") <= 0:
             Projectile.Instances.remove(self)
-        elif self.pierce <= 0:
+        elif self.Get("pierce") <= 0:
             Projectile.Instances.remove(self)
         super().Update(dt)

@@ -51,17 +51,17 @@ class Enemy(Display, Entity):
 
         # check pour collisions avec projectiles
         collided = [proj for proj in Projectile.Instances
-                    if self.Collide(proj) and self not in proj.collided and proj.pierce >= 1]
+                    if self.Collide(proj) and self not in proj.collided and proj.Get("pierce") >= 1]
         collided.sort(key=lambda var: self.Distance(var))
         for proj in collided:
             # calcul des dégats
-            damage = proj.power - self.Get("armor")
+            damage = proj.Get("power") - self.Get("armor")
             if damage < 0:
                 damage = 0
             self.Add("hurt", damage)
             # faire en sorte que l'ennemi ne se fasse pas toucher plusieurs fois par le même projectile
             proj.collided.append(self)
-            proj.pierce -= 1
+            proj.Add("pierce", -1)
             # logique s'occupant de la mort de l'ennemi
             if self.Get("hp") <= 0:
                 Player.Instance.Killed(proj, self)
