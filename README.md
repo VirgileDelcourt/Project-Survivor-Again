@@ -7,6 +7,5 @@ La barre rouge à côté de votre personnage est sa barre de vie. Elle descend q
 La barre bleue en bas de l'écran est la barre d'expérience. Elle augmente quand vous gagnez de l'éxperience en tuant des ennemis et une fois pleine, vous augmentez de niveau.  
 Lorsque vous augmentez de niveau, vous avez un choix de 3 options d'améliorations. Choisisez celle que vous voulez en cliquant sur la touche 1, 2 ou 3 de votre clavier.  
 ## And now ?  
-Maintenant il faut juste que je rajoute de nouvelles améliorations. Mais si je veux en faire des cools, il faudra que je change un peu comment les projectile fonctionnent, ou que je rajoute des fonctionnalités.  
-Il faudra aussi que je pense à l'ajout d'un timer, pour que les ennemis deviennent plus fort et pour avoir un semblant de score.  
+Maintenant il faut juste que je rajoute de nouvelles améliorations.  
 Dans plus longtemps, je compte aussi rajouter un écran de selection de personnage, avec des armes et pouvoirs différents.
