@@ -29,7 +29,10 @@ class SizeUp(Upgrade):
         super().__init__("Bigger Balls", "tip.png", 9)
 
     def Apply(self, char):
-        char.Add("proj_size", 0.1)
+        if self.level + 1 == 9:
+            char.keywords.append(Keywords.SizeToPower)
+        else:
+            char.Add("proj_size", 0.1)
         super().Apply(char)
 
 
@@ -71,10 +74,10 @@ class CurseUp(Upgrade):
 
 class PowerUp(Upgrade):
     def __init__(self):
-        super().__init__("Stronger Balls", "tip.png", 10)
+        super().__init__("Stronger Balls", "tip.png", 5)
 
     def Apply(self, char):
-        char.Add("power", 0.1 * (self.level + 1))
+        char.Add("power", 0.5 * (self.level + 1))
         super().Apply(char)
 
 
@@ -98,7 +101,7 @@ class MovementUp(Upgrade):
 
 class Mitosis(Upgrade):
     def __init__(self):
-        super().__init__("Slow and Steady", "tip.png", 3)
+        super().__init__("Slow and Steady", "til.png", 3)
 
     def Apply(self, char):
         if self.level + 1 == 3:
@@ -108,6 +111,14 @@ class Mitosis(Upgrade):
             char.Add("duration", 2)
         super().Apply(char)
 
+
+class Feed(Upgrade):
+    def __init__(self):
+        super().__init__("Feeding Bullets", "tip.png", 1)
+
+    def Apply(self, char):
+        char.keywords.append(Keywords.Feed)
+        super().Apply(char)
 
 # initialisation des variables de classe d'Upgrade
 Upgrade.UpgradesGot = []

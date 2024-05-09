@@ -105,4 +105,4 @@ class Player(Display, Entity):
         upgrade.Apply(self)
         # mise à jour de l'exp requise pour monter de niveau
         self.experience -= self.maxexp
-        self.maxexp *= 1.1
+        self.maxexp *= 1.05

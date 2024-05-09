@@ -12,7 +12,7 @@ from Upgrade import Upgrade
 
 pygame.init()
 
-# initialisation de la fenetre et du joueur
+# initialisation de la fenêtre et du joueur
 dimx, dimy = 1080, 720
 window = pygame.display.set_mode((dimx, dimy))
 Player("pip.png", 100, 0, 1, 1, 5, 1, 2, 2, 2, [])
@@ -73,10 +73,10 @@ while running:
     timer += dt
 
     # spawn des ennemis (plus il y en a, moins on en spawn)
-    curse = Player.Instance.Get("curse") * ((timer / 120) + 1)
+    curse = Player.Instance.Get("curse") * ((timer / 300) + 1)
     if len(Enemy.Instances) == 0 \
             or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * curse:
-        Enemy("pap.png", 10 * curse, 10 * curse, 1 * Player.Instance.Get("curse"))
+        Enemy("pap.png", int(10 * curse), int(10 * curse), int(Player.Instance.Get("curse")))
 
     # mise à jour de l'écran et de chaque entité
     window.fill("light green")
