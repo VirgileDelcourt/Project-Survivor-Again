@@ -7,8 +7,12 @@ from Entity import Entity
 class Projectile(Display, Entity):
     Instances = []
 
-    def __init__(self, coord, target, atk, size, speed, pierce, duration, keywords):
-        Display.__init__(self, None, coord, size * 25)
+    def __init__(self, coord, target, atk, size, speed, pierce, duration, keywords, **kwargs):
+        if "color" in kwargs:
+            color = kwargs["color"]
+        else:
+            color = "white"
+        Display.__init__(self, None, coord, size * 25, color)
         self.movement = pygame.Vector2(target) - self.coord
         self.movement.normalize_ip()
         self.movement *= speed * 200
