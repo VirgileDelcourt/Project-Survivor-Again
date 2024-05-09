@@ -41,7 +41,6 @@ while running:
     # calcul du temps depuis la derniere mise à jour
     dt = time() - last
     last = time()
-    timer += dt
 
     # on vérifie si le joueur veut quitter le jeu
     for event in pygame.event.get():
@@ -71,11 +70,13 @@ while running:
         # on stoppe le temps pendant la montée de niveau
         dt = 0
 
+    timer += dt
+
     # spawn des ennemis (plus il y en a, moins on en spawn)
     curse = Player.Instance.Get("curse") * ((timer / 120) + 1)
     if len(Enemy.Instances) == 0 \
             or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * curse:
-        Enemy("pap.png", 10 * curse, 10 * curse, 1 * curse)
+        Enemy("pap.png", 10 * curse, 10 * curse, 1 * Player.Instance.Get("curse"))
 
     # mise à jour de l'écran et de chaque entité
     window.fill("light green")
