@@ -13,7 +13,7 @@ sides = ["top", "bottom", "left", "the cooler 4th option (right)"]
 class Enemy(Display, Entity):
     Instances = []
 
-    def __init__(self, image, hp, atk, speed, player:Player):
+    def __init__(self, image, hp, atk, speed, player:Player, angle=0):
         Display.__init__(self, image, (0, 0), 50)
 
         # on choisit un bord d'où faire apparaitre l'ennemi
@@ -34,9 +34,10 @@ class Enemy(Display, Entity):
             x = width - 4
             y = randrange(height - 4)
         self.coord = pygame.Vector2(x, y)
+        self.angle = angle
 
-        Entity.__init__(self, [], maxhp=hp, armor=0, speed=speed, atk=atk)
-        self._player_ref: Player=player
+        Entity.__init__(self, {}, maxhp=hp, armor=0, speed=speed, atk=atk)
+        self._player_ref: Player = player
         Enemy.Instances.append(self)
 
     def Update(self, dt):
@@ -44,6 +45,7 @@ class Enemy(Display, Entity):
         if not self.Collide(self._player_ref):
             movement = self._player_ref.coord - self.coord
             movement.normalize_ip()
+            movement = movement.rotate(self.angle)
             self.coord += movement * dt * 50 * self.Get("speed")
         # sinon on l'attaque
         else:
@@ -69,3 +71,14 @@ class Enemy(Display, Entity):
                 break
 
         super().Update(dt)
+
+
+class Newbie(Enemy):
+    def __init__(self, player, curse):
+        super().__init__("pap.png", int(5 * curse), int(10 * curse), int(player.Get("curse")), player=player)
+
+
+class Floatie(Enemy):
+    def __init__(self, player, curse):
+        super().__init__("bird.png", int(4 * curse), int(10 * curse), int(2 * player.Get("curse")),
+                         player=player, angle=70)

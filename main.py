@@ -5,17 +5,24 @@ from time import time
 
 from Display import Display
 from Player import Player
-from Enemy import Enemy
+from Enemy import Enemy, Newbie, Floatie
 from Projectile import Projectile
 import Upgrade as m_Upgrade
 from Upgrade import Upgrade
+from Wave import Wave
 
 pygame.init()
 
 # initialisation de la fenêtre et du joueur
 dimx, dimy = 1080, 720
 window = pygame.display.set_mode((dimx, dimy))
-player=Player("pip.png", 100, 0, 1, 1, 2.5, 1, 2, 2, 2, [])
+player = Player("pip.png", 100, 0, 1, 1, 2.5, 1, 2, 2, 2, [])
+waves = [Wave(0, (Newbie, 1)),
+         Wave(120, (Newbie, 0.7), (Floatie, 0.3)),
+         Wave(140, (Floatie, 1)),
+         Wave(160, (Newbie, 0.5), (Floatie, 0.5)),
+         Wave(180, (Newbie, 1))]
+currentwave = 0
 
 # creation d'un masque pour l'écran de montee de niveau
 tint = pygame.Surface((dimx, dimy))
@@ -76,7 +83,9 @@ while running:
     curse = player.Get("curse") * ((timer / 300) + 1)
     if len(Enemy.Instances) == 0 \
             or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * curse:
-        Enemy("pap.png", int(5 * curse), int(10 * curse), int(player.Get("curse")), player=player)
+        waves[currentwave].GetEnemy()(player, curse)
+    if currentwave + 1 != len(waves) and timer >= waves[currentwave + 1].time:
+        currentwave += 1
 
     # mise à jour de l'écran et de chaque entité
     window.fill("light green")
