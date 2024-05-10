@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
+from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN, K_w,K_z, K_a,K_q,K_s,K_d
 
 from Display import Display
 from Projectile import Projectile
@@ -73,13 +73,13 @@ class Player(Display, Entity):
         # changement du momentum
         keys = pygame.key.get_pressed()
         x, y = 0, 0
-        if keys[K_LEFT]:
+        if keys[K_LEFT] or keys[K_a] or keys[K_q]:
             x += 1
-        if keys[K_RIGHT]:
+        if keys[K_RIGHT] or keys[K_d]:
             x -= 1
-        if keys[K_UP]:
+        if keys[K_UP] or keys[K_w] or keys[K_z]:
             y += 1
-        if keys[K_DOWN]:
+        if keys[K_DOWN] or keys[K_s]:
             y -= 1
         vec = pygame.Vector2(x, y)
         # on ramène le vecteur à une magnitude de 1 (pour que le joueur bouge toujours de 1)
