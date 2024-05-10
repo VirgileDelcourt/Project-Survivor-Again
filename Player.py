@@ -22,8 +22,6 @@ stats = {"maxhp": 100,
 
 
 class Player(Display, Entity):
-    Instance = None
-
     def __init__(self, image, hp, armor, speed, cooldown, atk, proj_size, proj_speed, pierce, duration, keywords):
         x, y = pygame.display.get_window_size()
         Display.__init__(self, image, (x / 2, y / 2), 50)
@@ -46,8 +44,6 @@ class Player(Display, Entity):
         self.experience = 0  # experience actuelle
         self.maxexp = 100  # experience requise pour monter de niveau
         self.level = 0  # niveau actuel
-
-        Player.Instance = self
 
     def Damage(self, pow):
         # perd des pv et obtient 1 seconde d'invincibilité

@@ -13,7 +13,7 @@ sides = ["top", "bottom", "left", "the cooler 4th option (right)"]
 class Enemy(Display, Entity):
     Instances = []
 
-    def __init__(self, image, hp, atk, speed):
+    def __init__(self, image, hp, atk, speed, player:Player):
         Display.__init__(self, image, (0, 0), 50)
 
         # on choisit un bord d'où faire apparaitre l'ennemi
@@ -36,18 +36,18 @@ class Enemy(Display, Entity):
         self.coord = pygame.Vector2(x, y)
 
         Entity.__init__(self, [], maxhp=hp, armor=0, speed=speed, atk=atk)
-
+        self._player_ref: Player=player
         Enemy.Instances.append(self)
 
     def Update(self, dt):
         # si l'on ne touche pas le joueur, on avance
-        if not self.Collide(Player.Instance):
-            movement = Player.Instance.coord - self.coord
+        if not self.Collide(self._player_ref):
+            movement = self._player_ref.coord - self.coord
             movement.normalize_ip()
             self.coord += movement * dt * 50 * self.Get("speed")
         # sinon on l'attaque
         else:
-            Player.Instance.Damage(self.Get("atk"))
+            self._player_ref.Damage(self.Get("atk"))
 
         # check pour collisions avec projectiles
         collided = [proj for proj in Projectile.Instances
@@ -64,7 +64,7 @@ class Enemy(Display, Entity):
             proj.Add("pierce", -1)
             # logique s'occupant de la mort de l'ennemi
             if self.Get("hp") <= 0:
-                Player.Instance.Killed(proj, self)
+                self._player_ref.Killed(proj, self)
                 Enemy.Instances.remove(self)
                 break
 
