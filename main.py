@@ -15,7 +15,7 @@ pygame.init()
 # initialisation de la fenêtre et du joueur
 dimx, dimy = 1080, 720
 window = pygame.display.set_mode((dimx, dimy))
-Player("pip.png", 100, 0, 1, 1, 5, 1, 2, 2, 2, [])
+player=Player("pip.png", 100, 0, 1, 1, 5, 1, 2, 2, 2, [])
 
 # creation d'un masque pour l'écran de montee de niveau
 tint = pygame.Surface((dimx, dimy))
@@ -47,7 +47,7 @@ while running:
         if event.type == QUIT:
             running = False
     # ici on s'occupe de la montee de niveau
-    if Player.Instance.Can_Lvl_Up():
+    if player.Can_Lvl_Up():
         # on vérifie si on n'a pas encore choisi d'Upgrade
         if not upgrades_to_chose:
             # creation des choix d'Upgrade
@@ -58,13 +58,13 @@ while running:
         # on vérifie si le joueur a choisi une Upgrade
         keys = pygame.key.get_pressed()
         if keys[K_1] or keys[K_KP1]:
-            Player.Instance.Level_Up(upgrades_to_chose[0])
+            player.Level_Up(upgrades_to_chose[0])
             upgrades_to_chose = []
         elif keys[K_2] or keys[K_KP2]:
-            Player.Instance.Level_Up(upgrades_to_chose[1])
+            player.Level_Up(upgrades_to_chose[1])
             upgrades_to_chose = []
         elif keys[K_3] or keys[K_KP3]:
-            Player.Instance.Level_Up(upgrades_to_chose[2])
+            player.Level_Up(upgrades_to_chose[2])
             upgrades_to_chose = []
 
         # on stoppe le temps pendant la montée de niveau
@@ -73,17 +73,17 @@ while running:
     timer += dt
 
     # spawn des ennemis (plus il y en a, moins on en spawn)
-    curse = Player.Instance.Get("curse") * ((timer / 300) + 1)
+    curse = player.Get("curse") * ((timer / 300) + 1)
     if len(Enemy.Instances) == 0 \
             or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * curse:
-        Enemy("pap.png", int(10 * curse), int(10 * curse), int(Player.Instance.Get("curse")))
+        Enemy("pap.png", int(10 * curse), int(10 * curse), int(player.Get("curse")), player=player)
 
     # mise à jour de l'écran et de chaque entité
     window.fill("light green")
-    Player.Instance.Update(dt)
+    player.Update(dt)
     # si le joueur bouge, on bouge toutes les autres entités
-    if Player.Instance.momentum != (0, 0):
-        delta = Player.Instance.momentum * dt * 150 * Player.Instance.Get("speed")
+    if player.momentum != (0, 0):
+        delta = player.momentum * dt * 150 * player.Get("speed")
         for display in Projectile.Instances + Enemy.Instances:
             display.coord += delta
     for enemy in Enemy.Instances:
@@ -92,19 +92,19 @@ while running:
     for proj in Projectile.Instances:
         proj.Update(dt)
         window.blit(proj.surf, proj.rect)
-    window.blit(Player.Instance.surf, Player.Instance.rect)
+    window.blit(player.surf, player.rect)
 
     # creation de la barre de vie
-    if Player.Instance.Get_State():
+    if player.Get_State():
         pygame.draw.rect(window, "white",
-                         [(dimx / 2) - (Player.Instance.Get("maxhp") / 2), (dimy / 2) + 50,
-                          Player.Instance.Get("maxhp"), 20])
+                         [(dimx / 2) - (player.Get("maxhp") / 2), (dimy / 2) + 50,
+                          player.Get("maxhp"), 20])
         pygame.draw.rect(window, "red",
-                         [(dimx / 2) - (Player.Instance.Get("maxhp") / 2), (dimy / 2) + 50, Player.Instance.Get("hp"),
+                         [(dimx / 2) - (player.Get("maxhp") / 2), (dimy / 2) + 50, player.Get("hp"),
                           20])
 
     # creation de la barre d'exp
-    exp_percent = Player.Instance.experience / Player.Instance.maxexp
+    exp_percent = player.experience / player.maxexp
     pygame.draw.rect(window, "white", [0, dimy - 30, dimx, 30])
     pygame.draw.rect(window, "blue", [0, dimy - 30, dimx * exp_percent, 30])
 
@@ -143,7 +143,7 @@ while running:
     pygame.display.flip()
 
     # si le joueur est mort, on quitte
-    if not Player.Instance.Get_State():
+    if not player.Get_State():
         running = False
     # s'il n'y a plus d'Upgrade restante, on quitte (pour eviter le crash)
     elif not Upgrade.UpgradesLeft:
