@@ -11,7 +11,7 @@ class Projectile(Display, Entity):
         if "color" in kwargs:
             color = kwargs["color"]
         else:
-            color = "white"
+            color = "gray"
         Display.__init__(self, None, coord, size * 25, color)
         self.Draw()
         self.movement = pygame.Vector2(target) - self.coord
@@ -45,7 +45,14 @@ class Projectile(Display, Entity):
     def UpdateSize(self):
         self.Change_Radius(25 * self.Get("size"))
     def Draw(self):
-        pygame.draw.circle(self.surf, self.color, (self.radius, self.radius), self.radius)
+        border=10
+        width=2*self.radius
+        pygame.draw.rect(self.surf,pygame.Color(0,0,0), rect=(0,0,width,width))
+        pygame.draw.rect(self.surf,self.color, rect=(border,border,width-2*border,width-2*border))
+        pygame.draw.rect(self.surf,"white", rect=(width//4,width//4,width//4,width//4))
+        # pygame.draw.circle(self.surf, self.color, (self.radius, self.radius), self.radius)
+
+
     def Change_Radius(self, newradius):
         self.radius = newradius
         self.surf = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
