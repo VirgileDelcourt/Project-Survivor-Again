@@ -9,9 +9,7 @@ class Display(pygame.sprite.Sprite):
             self.surf = pygame.image.load(image).convert_alpha()
         else:
             self.surf = pygame.Surface((radius*2, radius*2), pygame.SRCALPHA)
-            pygame.draw.circle(self.surf, color, (radius, radius), radius)
         self.rect = self.surf.get_rect(center=coord)
-
         self.image = image
         self.color = color
 
@@ -32,13 +30,7 @@ class Display(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(center=self.coord)
 
     def Update(self, dt):
-        self.rect.center = self.coord
+        self.rect.center = self.coord # type: ignore
 
     def Change_Radius(self, newradius):
-        if self.image is None:
-            self.radius = newradius
-            self.surf = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
-            pygame.draw.circle(self.surf, self.color, (self.radius, self.radius), self.radius)
-            self.rect = self.surf.get_rect(center=self.coord)
-        else:
-            print("Tried to change size of a Display with an image (not implemented yet)")
+        raise NotImplementedError

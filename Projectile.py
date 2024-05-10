@@ -13,6 +13,7 @@ class Projectile(Display, Entity):
         else:
             color = "white"
         Display.__init__(self, None, coord, size * 25, color)
+        self.Draw()
         self.movement = pygame.Vector2(target) - self.coord
         self.movement.normalize_ip()
         self.movement *= speed * 200
@@ -43,3 +44,10 @@ class Projectile(Display, Entity):
 
     def UpdateSize(self):
         self.Change_Radius(25 * self.Get("size"))
+    def Draw(self):
+        pygame.draw.circle(self.surf, self.color, (self.radius, self.radius), self.radius)
+    def Change_Radius(self, newradius):
+        self.radius = newradius
+        self.surf = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
+        self.Draw()
+        self.rect = self.surf.get_rect(center=self.coord)
