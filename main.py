@@ -15,7 +15,7 @@ pygame.init()
 # initialisation de la fenêtre et du joueur
 dimx, dimy = 1080, 720
 window = pygame.display.set_mode((dimx, dimy))
-player=Player("pip.png", 100, 0, 1, 1, 5, 1, 2, 2, 2, [])
+player=Player("pip.png", 100, 0, 1, 1, 2.5, 1, 2, 2, 2, [])
 
 # creation d'un masque pour l'écran de montee de niveau
 tint = pygame.Surface((dimx, dimy))
@@ -76,7 +76,7 @@ while running:
     curse = player.Get("curse") * ((timer / 300) + 1)
     if len(Enemy.Instances) == 0 \
             or random() < (1 / (len(Enemy.Instances) + 1)) * dt * 30 * curse:
-        Enemy("pap.png", int(10 * curse), int(10 * curse), int(player.Get("curse")), player=player)
+        Enemy("pap.png", int(5 * curse), int(10 * curse), int(player.Get("curse")), player=player)
 
     # mise à jour de l'écran et de chaque entité
     window.fill("light green")
