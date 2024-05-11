@@ -89,8 +89,8 @@ class Player(Display, Entity):
 
         Display.Update(self, dt)
 
-    def Killed(self, proj, ennemy):
-        self.experience += 10 * self.Get("growth")
+    def Killed(self, proj, enemy):
+        self.experience += enemy.Get("exp") * self.Get("growth")
         for keyword in proj.keywords_kill:
             keyword.Kill(proj)
 

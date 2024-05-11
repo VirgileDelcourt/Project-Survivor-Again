@@ -5,7 +5,7 @@ from time import time
 
 from Display import Display
 from Player import Player
-from Enemy import Enemy, Newbie, Floatie
+from Enemy import Enemy, Newbie, Floatie, Shootie
 from Projectile import Projectile
 import Upgrade as m_Upgrade
 from Upgrade import Upgrade
@@ -18,11 +18,13 @@ pygame.init()
 dimx, dimy = 1080, 720
 window = pygame.display.set_mode((dimx, dimy))
 player = Player("pip.png", 100, 0, 1, 1, 2.5, 1, 2, 2, 2, [])
-waves = [Wave(0, (Newbie, 1)),
+waves = [Wave(0, (Shootie, 1)),
+         Wave(60, (Newbie, 0.9), (Shootie, 0.1)),
+         Wave(100, (Newbie, 1)),
          Wave(120, (Newbie, 0.7), (Floatie, 0.3)),
          Wave(140, (Floatie, 1)),
-         Wave(160, (Newbie, 0.5), (Floatie, 0.5)),
-         Wave(180, (Newbie, 1))]
+         Wave(180, (Newbie, 0.5), (Floatie, 0.5)),
+         Wave(200, (Newbie, 1))]
 currentwave = 0
 
 # creation d'un masque pour l'écran de montee de niveau
