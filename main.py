@@ -9,6 +9,7 @@ from Enemy import Enemy, Newbie, Floatie
 from Projectile import Projectile
 import Upgrade as m_Upgrade
 from Upgrade import Upgrade
+import Keywords
 from Wave import Wave
 
 pygame.init()

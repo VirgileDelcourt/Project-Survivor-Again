@@ -10,10 +10,10 @@ class Mitosis:
     def Update(self, dt):
         self.Add("timer", -dt)
         if self.Get("timer") <= 0:
-            keywords = self.keywords[:]
+            keywords = self.Get("keywords")[:]
             keywords.remove(Mitosis)
             Projectile(self.coord, pygame.mouse.get_pos(), self.Get("power"), self.Get("size") / 2, self.Get("speed") * 2,
-                       self.Get("basepierce"), self.Get("baseduration") / 2, keywords, color="grey")
+                       self.Get("basepierce"), self.Get("baseduration") / 2, keywords, self.Get("player"), color="grey")
             self.Add("timer", 1)
 
 
@@ -39,3 +39,14 @@ class SizeToPower:
             else:
                 self.Add("power", -self.Get("size converted to damage"))
                 self.Set("size converted to damage", 0)
+
+
+class Boomerang:
+    def __init__(self):
+        pass
+
+    def Expire(self):
+        keywords = self.Get("keywords")[:]
+        keywords.remove(Boomerang)
+        Projectile(self.coord, self.Get("player").coord, self.Get("power"), self.Get("size"), self.Get("speed"),
+                   10, self.Get("lifetime"), keywords, self.Get("player"))

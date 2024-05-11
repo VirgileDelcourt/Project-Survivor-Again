@@ -7,7 +7,7 @@ from Entity import Entity
 class Projectile(Display, Entity):
     Instances = []
 
-    def __init__(self, coord, target, atk, size, speed, pierce, duration, keywords, **kwargs):
+    def __init__(self, coord, target, atk, size, speed, pierce, duration, keywords, player, **kwargs):
         if "color" in kwargs:
             color = kwargs["color"]
         else:
@@ -20,7 +20,8 @@ class Projectile(Display, Entity):
         self.collided = []
 
         Entity.__init__(self, [], power=atk, pierce=pierce, duration=duration,
-                        speed=speed, size=size, basepierce=pierce, baseduration=duration)
+                        speed=speed, size=size,
+                        keywords=keywords, player=player, lifetime=0)
 
         for keyword in keywords:
             keyword.__init__(self)
@@ -35,6 +36,7 @@ class Projectile(Display, Entity):
         # mouvement
         self.coord += self.movement * dt
         self.Add("duration", -dt)
+        self.Add("lifetime", dt)
         # on vérifie si le projectile ne devrait pas disparaitre
         if self.Get("duration") <= 0 or self.Get("pierce") <= 0:
             Projectile.Instances.remove(self)

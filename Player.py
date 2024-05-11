@@ -55,7 +55,7 @@ class Player(Display, Entity):
         # tire un projectile
         pos = pygame.mouse.get_pos()
         Projectile(self.coord, pos, self.Get("power"), self.Get("proj_size"), self.Get("proj_speed"),
-                   self.Get("pierce"), self.Get("duration"), self.keywords[:])
+                   self.Get("pierce"), self.Get("duration"), self.keywords[:], self)
 
     def Update(self, dt):
         # réduit le temps d'invincibilité restant

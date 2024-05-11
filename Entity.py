@@ -11,9 +11,11 @@ class Entity:
                 stats[stat] = _stats[stat]
         for key in stats:
             self.stats[key] = stats[key]
+            self.stats["base" + key] = self.stats[key]
         for key in base_stats:
             if key not in self.stats:
                 self.stats[key] = base_stats[key]
+                self.stats["base" + key] = self.stats[key]
 
         self.Set("hurt", 0)
 
