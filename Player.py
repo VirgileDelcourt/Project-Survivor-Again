@@ -91,6 +91,8 @@ class Player(Display, Entity):
 
     def Killed(self, proj, ennemy):
         self.experience += 10 * self.Get("growth")
+        for keyword in proj.keywords_kill:
+            keyword.Kill(proj)
 
     def Can_Lvl_Up(self):
         return self.experience >= self.maxexp

@@ -24,7 +24,10 @@ class Projectile(Display, Entity):
 
         for keyword in keywords:
             keyword.__init__(self)
-        self.keywords = keywords
+        self.keywords_update = [C for C in keywords if hasattr(C, 'Update') and callable(C.Update)]
+        self.keywords_expire = [C for C in keywords if hasattr(C, 'Expire') and callable(C.Expire)]
+        self.keywords_pierce = [C for C in keywords if hasattr(C, 'Pierce') and callable(C.Pierce)]
+        self.keywords_kill = [C for C in keywords if hasattr(C, 'Kill') and callable(C.Kill)]
 
         Projectile.Instances.append(self)
 
@@ -33,25 +36,25 @@ class Projectile(Display, Entity):
         self.coord += self.movement * dt
         self.Add("duration", -dt)
         # on vérifie si le projectile ne devrait pas disparaitre
-        if self.Get("duration") <= 0:
+        if self.Get("duration") <= 0 or self.Get("pierce") <= 0:
             Projectile.Instances.remove(self)
-        elif self.Get("pierce") <= 0:
-            Projectile.Instances.remove(self)
+            for keyword in self.keywords_expire:
+                keyword.Expire(self)
         else:
-            for keyword in self.keywords:
+            for keyword in self.keywords_update:
                 keyword.Update(self, dt)
         super().Update(dt)
 
     def UpdateSize(self):
         self.Change_Radius(25 * self.Get("size"))
-    def Draw(self):
-        border=10
-        width=2*self.radius
-        pygame.draw.rect(self.surf,pygame.Color(0,0,0), rect=(0,0,width,width))
-        pygame.draw.rect(self.surf,self.color, rect=(border,border,width-2*border,width-2*border))
-        pygame.draw.rect(self.surf,"white", rect=(width//4,width//4,width//4,width//4))
-        # pygame.draw.circle(self.surf, self.color, (self.radius, self.radius), self.radius)
 
+    def Draw(self):
+        border = 10
+        width = 2 * self.radius
+        pygame.draw.rect(self.surf, pygame.Color(0, 0, 0), rect=(0, 0, width, width))
+        pygame.draw.rect(self.surf, self.color, rect=(border, border, width - 2 * border, width - 2 * border))
+        pygame.draw.rect(self.surf, "white", rect=(width // 4, width // 4, width // 4, width // 4))
+        # pygame.draw.circle(self.surf, self.color, (self.radius, self.radius), self.radius)
 
     def Change_Radius(self, newradius):
         self.radius = newradius

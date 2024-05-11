@@ -21,11 +21,9 @@ class Feed:
     def __init__(self):
         pass
 
-    def Update(self, dt):
-        if self.Get("pierce") < self.Get("basepierce"):
-            self.Add("size", (self.Get("basepierce") - self.Get("pierce")) * 0.2)
-            self.Set("basepierce", self.Get("pierce"))
-            self.UpdateSize()
+    def Pierce(self):
+        self.Add("size", 0.2)
+        self.UpdateSize()
 
 
 class SizeToPower:

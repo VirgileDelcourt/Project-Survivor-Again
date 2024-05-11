@@ -64,6 +64,8 @@ class Enemy(Display, Entity):
             # faire en sorte que l'ennemi ne se fasse pas toucher plusieurs fois par le même projectile
             proj.collided.append(self)
             proj.Add("pierce", -1)
+            for keyword in proj.keywords_pierce:
+                keyword.Pierce(proj)
             # logique s'occupant de la mort de l'ennemi
             if self.Get("hp") <= 0:
                 self._player_ref.Killed(proj, self)
