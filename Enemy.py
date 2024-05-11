@@ -1,3 +1,4 @@
+import math
 import pygame
 from random import choices, randrange
 
@@ -87,10 +88,13 @@ class Floatie(Enemy):
 
 
 class Shootie(Enemy):
-    def __init__(self, player, curse):
+    Instances=[] #pour dessiner les canons séparément
+    def __init__(self, player:Player, curse):
         super().__init__("lit.png", int(2 * curse), int(curse), 0.5 * player.Get("curse"), 15,
                          player=player, angle=-85)
         self.timer = 2
+        self.cannon=pygame.image.load("gun.png").convert_alpha()
+        Shootie.Instances.append(self)
 
     def Update(self, dt):
         super().Update(dt)
@@ -98,8 +102,17 @@ class Shootie(Enemy):
             if self.timer > 0:
                 self.timer -= dt
             else:
-                EnemyProj(self._player_ref, self.Get("atk"), tuple(self.coord))
+                EnemyProj(self._player_ref, self.Get("atk"), tuple(self.coord+ 70*self.looking_direction))
                 self.timer += 2
+        else:
+            Shootie.Instances.remove(self) #éviter de laisser les canons traîner sur l'écran
+    def blitRotatedCannon(self,window:pygame.Surface):
+        """dessine le canon du tireur, pointant vers le joueur, situé devant l'ennemi"""
+        self.looking_direction= (self._player_ref.coord - self.coord).normalize()
+        angle = math.degrees(math.atan2(-1*self.looking_direction.y, self.looking_direction.x))
+        rotated_surf = pygame.transform.rotate(self.cannon, angle)
+        bounding_rect = rotated_surf.get_rect(center = self.coord + 50*self.looking_direction)
+        window.blit(rotated_surf, bounding_rect)
 
 
 class EnemyProj(Enemy):
