@@ -120,6 +120,19 @@ class Feed(Upgrade):
         char.keywords.append(Keywords.Feed)
         super().Apply(char)
 
+
+class Boomerang(Upgrade):
+    def __init__(self):
+        super().__init__("Return to Sender", "fet.png", 2)
+
+    def Apply(self, char):
+        if self.level + 1 == 2:
+            char.keywords.append(Keywords.Boomerang)
+        else:
+            char.Add("proj_speed", 0.5)
+            char.Add("duration", 1.5)
+        super().Apply(char)
+
 # initialisation des variables de classe d'Upgrade
 Upgrade.UpgradesGot = []
 Upgrade.UpgradesLeft = []
