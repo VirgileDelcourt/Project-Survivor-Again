@@ -106,13 +106,20 @@ class EnemyProj(Enemy):
     def __init__(self, player, curse, coord):
         super().__init__(None, 1, int(5 * curse), 0, 0, player=player)
         self.coord = pygame.Vector2(coord)
+        self.color=pygame.Color("#d3201cff")
         self.radius = 30
         self.movement = player.coord - self.coord
         self.movement.normalize_ip()
         self.movement *= curse * 100
 
-        pygame.draw.circle(self.surf, "red", (self.radius, self.radius), self.radius)
+        self.Draw()
 
     def Update(self, dt):
         self.coord += self.movement * dt
         super().Update(dt)
+    def Draw(self):
+        border = 10
+        width = 2 * self.radius
+        pygame.draw.rect(self.surf, pygame.Color(0, 0, 0), rect=(0, 0, width, width))
+        pygame.draw.rect(self.surf, self.color, rect=(border, border, width - 2 * border, width - 2 * border))
+        pygame.draw.rect(self.surf, "white", rect=(width // 4, width // 4, width // 4, width // 4))
