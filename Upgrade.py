@@ -133,6 +133,15 @@ class Boomerang(Upgrade):
             char.Add("duration", 1.5)
         super().Apply(char)
 
+
+class ProjUp(Upgrade):
+    def __init__(self):
+        super().__init__("Multishot", "lit.png", 2)
+
+    def Apply(self, char):
+        char.Add("projectile", 1)
+        super().Apply(char)
+
 # initialisation des variables de classe d'Upgrade
 Upgrade.UpgradesGot = []
 Upgrade.UpgradesLeft = []

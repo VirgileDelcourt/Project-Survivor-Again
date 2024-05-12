@@ -54,7 +54,7 @@ class Player(Display, Entity):
             self.invincibility = 1
 
     def Fire(self):
-        # tire tout les projectiles
+        # tire tous les projectiles
         pos = pygame.mouse.get_pos()
         proj = []
         for _ in range(self.Get("projectile")):

@@ -5,7 +5,7 @@ from Projectile import Projectile
 
 class Mitosis:
     def __init__(self):
-        self.Set("timer", 0)
+        self.Set("timer", 2)
 
     def Update(self, dt):
         self.Add("timer", -dt)
@@ -14,7 +14,7 @@ class Mitosis:
             keywords.remove(Mitosis)
             Projectile(self.coord, pygame.mouse.get_pos(), self.Get("power"), self.Get("size") / 2, self.Get("speed") * 2,
                        self.Get("basepierce"), self.Get("baseduration") / 2, keywords, self.Get("player"), color="grey")
-            self.Add("timer", 1)
+            self.Add("timer", 2)
 
 
 class Feed:
@@ -29,16 +29,22 @@ class Feed:
 class SizeToPower:
     def __init__(self):
         self.Add("power", self.Get("size"))
-        self.Set("size converted to damage", self.Get("size"))
+        if self.Get("size") > 1:
+            self.Set("size converted to damage", self.Get("size") - 1)
+        else:
+            self.Set("size converted to damage", 0)
 
     def Update(self, dt):
-        if self.Get("size converted to damage") != self.Get("size"):
-            if self.Get("size") > 0:
-                self.Add("power", self.Get("size") - self.Get("size converted to damage"))
-                self.Set("size converted to damage", self.Get("size"))
+        print(self.Get("size"))
+        if self.Get("size converted to damage") != self.Get("size") - 1:
+            if self.Get("size") > 1:
+                self.Add("power", self.Get("size") - 1 - self.Get("size converted to damage"))
+                self.Set("size converted to damage", self.Get("size") - 1)
             else:
                 self.Add("power", -self.Get("size converted to damage"))
                 self.Set("size converted to damage", 0)
+            print(self.Get("size converted to damage"))
+        print()
 
 
 class Boomerang:
