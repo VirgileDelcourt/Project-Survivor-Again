@@ -44,6 +44,11 @@ for nom in dir(m_Upgrade):
 upgrades_to_chose = []
 upgrades_displays = [Display(None, (0, 0), 0), Display(None, (0, 0), 0), Display(None, (0, 0), 0)]
 
+pygame.mixer.music.load ( "heyya.mp3")  
+pygame.mixer.music.queue ( "heyya.mp3" )
+pygame.mixer.music.play()           
+
+
 running = True
 last = time()
 timer = 0
