@@ -33,6 +33,8 @@ class Projectile(Display, Entity):
         Projectile.Instances.append(self)
 
     def Update(self, dt):
+        if dt <= 0:
+            return
         # mouvement
         self.coord += self.movement * dt
         self.Add("duration", -dt)

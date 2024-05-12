@@ -17,8 +17,8 @@ pygame.init()
 # initialisation de la fenêtre et du joueur
 dimx, dimy = 1080, 720
 window = pygame.display.set_mode((dimx, dimy))
-player = Player("pip.png", 100, 0, 1, 1, 2.5, 1, 2, 2, 2, [])
-waves = [Wave(0, (Shootie, 1)),
+player = Player("pip.png", 100, 0, 1, 1, 2.5, 1, 2, 2, 2, 1, [])
+waves = [Wave(0, (Newbie, 1)),
          Wave(60, (Newbie, 0.9), (Shootie, 0.1)),
          Wave(100, (Newbie, 1)),
          Wave(120, (Newbie, 0.7), (Floatie, 0.3)),

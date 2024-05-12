@@ -16,13 +16,14 @@ stats = {"maxhp": 100,
          "proj_speed": 1,  # vitesse de chaque projectile (pourcentage)
          "pierce": 1,  # nombre d'ennemis que la balle traverse avant d'expirer
          "duration": 1,  # durée (en seconde) de la balle
+         "projectile": 1,  # nombre de projectiles tirés à chaque attaque
 
          "growth": 1,  # modifie l'exp gagnée (pourcentage)
          "curse": 1}  # modifie le nombre d'ennemis qui apparaissent (pourcentage)
 
 
 class Player(Display, Entity):
-    def __init__(self, image, hp, armor, speed, cooldown, atk, proj_size, proj_speed, pierce, duration, keywords):
+    def __init__(self, image, hp, armor, speed, cooldown, atk, proj_size, proj_speed, pierce, duration, projectiles, keywords):
         x, y = pygame.display.get_window_size()
         Display.__init__(self, image, (x / 2, y / 2), 50)
         Entity.__init__(self, stats,
@@ -34,7 +35,8 @@ class Player(Display, Entity):
                         proj_size=proj_size,
                         proj_speed=proj_speed,
                         pierce=pierce,
-                        duration=duration)
+                        duration=duration,
+                        projectile=projectiles)
 
         self.timer = cooldown  # temps restant avant la prochaine attaque
         self.keywords = keywords  # modificateurs appliqués sur les projectiles tirés
@@ -52,10 +54,21 @@ class Player(Display, Entity):
             self.invincibility = 1
 
     def Fire(self):
-        # tire un projectile
+        # tire tout les projectiles
         pos = pygame.mouse.get_pos()
-        Projectile(self.coord, pos, self.Get("power"), self.Get("proj_size"), self.Get("proj_speed"),
-                   self.Get("pierce"), self.Get("duration"), self.keywords[:], self)
+        proj = []
+        for _ in range(self.Get("projectile")):
+            proj.append(Projectile(self.coord, pos, self.Get("power"), self.Get("proj_size"), self.Get("proj_speed"),
+                        self.Get("pierce"), self.Get("duration"), self.keywords[:], self))
+        # changement de l'angle des projectiles (pour qu'ils ne fassent pas qu'un)
+        if self.Get("projectile") % 2 == 1:
+            for i in range(-10 * (self.Get("projectile") // 2), 10 * (self.Get("projectile") // 2) + 1, 10):
+                p = proj.pop(0)
+                p.movement = p.movement.rotate(i)
+        else:
+            for i in range(-10 * (self.Get("projectile") // 2) + 5, 10 * (self.Get("projectile") // 2) - 4, 10):
+                p = proj.pop(0)
+                p.movement = p.movement.rotate(i)
 
     def Update(self, dt):
         # réduit le temps d'invincibilité restant
