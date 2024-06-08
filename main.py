@@ -106,6 +106,8 @@ while running:
     for enemy in Enemy.Instances:
         enemy.Update(dt)
         window.blit(enemy.surf, enemy.rect)
+    for shootie in Shootie.Instances: #dessiner les canons au dessus des projectiles
+        shootie.blitRotatedCannon(window)
     for proj in Projectile.Instances:
         proj.Update(dt)
         window.blit(proj.surf, proj.rect)

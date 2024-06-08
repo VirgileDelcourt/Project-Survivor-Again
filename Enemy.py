@@ -1,3 +1,4 @@
+import math
 import pygame
 from random import choices, randrange
 
@@ -87,10 +88,13 @@ class Floatie(Enemy):
 
 
 class Shootie(Enemy):
-    def __init__(self, player, curse):
+    Instances=[] #pour dessiner les canons séparément
+    def __init__(self, player:Player, curse):
         super().__init__("lit.png", int(2 * curse), int(curse), 0.5 * player.Get("curse"), 15,
                          player=player, angle=-85)
         self.timer = 2
+        self.cannon=pygame.image.load("gun.png").convert_alpha()
+        Shootie.Instances.append(self)
 
     def Update(self, dt):
         super().Update(dt)
@@ -98,21 +102,37 @@ class Shootie(Enemy):
             if self.timer > 0:
                 self.timer -= dt
             else:
-                EnemyProj(self._player_ref, self.Get("atk"), tuple(self.coord))
+                EnemyProj(self._player_ref, self.Get("atk"), tuple(self.coord+ 70*self.looking_direction))
                 self.timer += 2
+        else:
+            Shootie.Instances.remove(self) #éviter de laisser les canons traîner sur l'écran
+    def blitRotatedCannon(self,window:pygame.Surface):
+        """dessine le canon du tireur, pointant vers le joueur, situé devant l'ennemi"""
+        self.looking_direction= (self._player_ref.coord - self.coord).normalize()
+        angle = math.degrees(math.atan2(-1*self.looking_direction.y, self.looking_direction.x))
+        rotated_surf = pygame.transform.rotate(self.cannon, angle)
+        bounding_rect = rotated_surf.get_rect(center = self.coord + 50*self.looking_direction)
+        window.blit(rotated_surf, bounding_rect)
 
 
 class EnemyProj(Enemy):
     def __init__(self, player, curse, coord):
         super().__init__(None, 1, int(5 * curse), 0, 0, player=player)
         self.coord = pygame.Vector2(coord)
+        self.color=pygame.Color("#d3201cff")
         self.radius = 30
         self.movement = player.coord - self.coord
         self.movement.normalize_ip()
         self.movement *= curse * 100
 
-        pygame.draw.circle(self.surf, "red", (self.radius, self.radius), self.radius)
+        self.Draw()
 
     def Update(self, dt):
         self.coord += self.movement * dt
         super().Update(dt)
+    def Draw(self):
+        border = 10
+        width = 2 * self.radius
+        pygame.draw.rect(self.surf, pygame.Color(0, 0, 0), rect=(0, 0, width, width))
+        pygame.draw.rect(self.surf, self.color, rect=(border, border, width - 2 * border, width - 2 * border))
+        pygame.draw.rect(self.surf, "white", rect=(width // 4, width // 4, width // 4, width // 4))
